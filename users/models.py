@@ -40,6 +40,7 @@ class Product(models.Model):
 class Order(models.Model):
     id = models.AutoField(primary_key=True)
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
