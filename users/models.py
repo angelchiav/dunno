@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-class User(models.Model):
-    email = models.EmailField(AbstractUser)
+class User(AbstractUser):
     ROLES = [
         ('admin', 'Administrator'),
         ('ceo', 'CEO'),
@@ -9,10 +8,12 @@ class User(models.Model):
         ('salesman', 'Salesman'),
         ('customer', 'Customer')
     ]
-    role = models.CharField(max_length=8, choices=ROLES)
+    bio = models.TextField(blank=True, null=True)
+    birth_date = models.DateField(null=True, blank=True)
+    role = models.CharField(max_length=8, choices=ROLES, default='customer')
 
     def __str__(self):
-        return self.full_name
+        return f'{self.first_name} {self.last_name}' if self.first_name and self.last_name else self.username
     
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -34,17 +35,17 @@ class Product(models.Model):
         return f'{self.name} - ${self.price}'
     
 class Order(models.Model):
-    id = models.AutoField(primary_key=True)
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.id}'
+        return f'Order #{self.id} - {self.customer.first_name}'
 
 class Shipping(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=10, blank=True)
+    phone = models.CharField(max_length=15, blank=True)
     country = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     address = models.CharField(max_length=150)
