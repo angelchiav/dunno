@@ -1,11 +1,7 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractUser
 class User(models.Model):
-    name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    email = models.EmailField()
-    bio = models.TextField(blank=True, null=True)
-    birth_date = models.DateField()
+    email = models.EmailField(AbstractUser)
     ROLES = [
         ('admin', 'Administrator'),
         ('ceo', 'CEO'),
@@ -16,7 +12,7 @@ class User(models.Model):
     role = models.CharField(max_length=8, choices=ROLES)
 
     def __str__(self):
-        return self.name
+        return self.full_name
     
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -54,4 +50,4 @@ class Shipping(models.Model):
     address = models.CharField(max_length=150)
     
     def __str__(self):
-        return self.order
+        return f'Shipping for order {self.order.id}'
