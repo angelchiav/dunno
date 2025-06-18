@@ -27,7 +27,7 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('DEBUG', 'False').lower() == 'true'
 
 
 # Application definition
